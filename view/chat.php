@@ -11,7 +11,34 @@
 <label>
 Message: <input type="text" id="message">
 </label>
-<script src="chat.js"></script>
+<script >
+  const chat = document.querySelector("#chat");
+const message = document.querySelector("#message");
+
+function readChat() {
+  fetch("read")
+    .then((res) => res.text())
+    .then((data) => {
+      chat.value = data;
+    });
+  setTimeout(readChat, 1000);
+}
+readChat();
+
+message.addEventListener("keyup", (e) => {
+  if (e.keyCode === 13) {
+    fetch("submit", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `text=${message.value}`,
+    });
+    message.value = "";
+  }
+});
+
+</script>
 
 </body>
 </html>
