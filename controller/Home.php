@@ -20,16 +20,21 @@ class Home
   function submit()
   {
     $message = $_POST['text'];
-    $this->model->write($message); // Corrected the scope issue
+    $username = $_POST['username'];
+    $this->model->write($message, $username); 
   }
 
-  function read()
-  {
-    $this->content = $this->model->read(); // Corrected the scope issue
+  function read() {
+    $this->content = $this->model->read(); 
     $messages = [];
     while ($row = $this->content->fetch_assoc()) {
-      $messages[] = $row['content'];
+      $messages[] = [
+        'username' => $row['username'],
+        'content' => $row['content']
+      ];
     }
-    echo implode("\n", $messages); // Correctly echo the messages
+    echo json_encode($messages); 
   }
+  
+  
 }

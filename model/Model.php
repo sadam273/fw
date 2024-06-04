@@ -9,9 +9,9 @@ Class Model{
         $this->dbconn = $database->dbconn;
     }
 
-    public function write($content){
-        $stmt = $this->dbconn->prepare("INSERT INTO message (content) VALUES (?)");
-        $stmt->bind_param("s", $content);
+    public function write($content, $username){
+        $stmt = $this->dbconn->prepare("INSERT INTO message (username, content) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $content);
         $stmt->execute();
         $stmt->close();
     }

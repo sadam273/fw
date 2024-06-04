@@ -9,21 +9,28 @@
 
 <textarea id="chat" rows="20" cols="31" readonly></textarea><br>
 <label>
+Username: <input type="text" id="username">
+</label>
+<label>
 Message: <input type="text" id="message">
 </label>
 <script >
-  const chat = document.querySelector("#chat");
+const chat = document.querySelector("#chat");
 const message = document.querySelector("#message");
+const username = document.querySelector("#username");
 
 function readChat() {
   fetch("read")
-    .then((res) => res.text())
+    .then((res) => res.json())
     .then((data) => {
-      chat.value = data;
+      // Format messages so the username appears above the content
+      chat.value = data.map(message => `${message.username}\n${message.content}`).join("\n\n");
     });
   setTimeout(readChat, 1000);
 }
 readChat();
+
+
 
 message.addEventListener("keyup", (e) => {
   if (e.keyCode === 13) {
@@ -32,9 +39,10 @@ message.addEventListener("keyup", (e) => {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `text=${message.value}`,
+      body: `text=${encodeURIComponent(message.value)}&username=${encodeURIComponent(username.value)}`,
     });
     message.value = "";
+    username.value = "";
   }
 });
 
