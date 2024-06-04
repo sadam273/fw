@@ -17,6 +17,10 @@ class Home
     include "view/chat.php";
   }
 
+  function asset(){
+    include "asset/foto-orang.png";
+  }
+
   function submit()
   {
     $message = $_POST['text'];
